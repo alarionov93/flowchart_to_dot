@@ -1,4 +1,8 @@
-for f in *.py
+#!/bin/bash
+
+# static path
+for f in /home/student/flowchart_to_dot_train_data/descr/*.py; 
 do
 	python3 -m pyflowchart "$f" > $(echo "$f" | cut -d '.' -f 1).d
 done;
+python3 main.py /home/student/flowchart_to_dot_train_data/descr/
