@@ -36,8 +36,8 @@ def wrap(instr, w=20):
 
 def translate(node):
 	return node.\
-		replace('input', 'ввод ').\
-		replace('output', 'вывод ').\
+		replace('input:', 'ввод ').\
+		replace('output:', 'вывод ').\
 		replace('start', 'начало\n').\
 		replace('end function return', 'конец')
 

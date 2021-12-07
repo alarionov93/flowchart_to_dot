@@ -23,8 +23,6 @@ OPERATIONS = {
     'end': ['конец', 'end'],
 }
 
-work_dir = sys.argv[1]
-
 
 def insert_desc(template: str, f_name: str, data: str, count: int) -> str:
     if not template:
@@ -53,9 +51,12 @@ def generate_descr_line(file: '_io.TextIOWrapper', action: str, label: str, coun
     try:
         tpl = OPERATIONS[action][1]
         if 'вывод' in label:
+            print(label)
             tpl = OPERATIONS[action][2]
     except KeyError:
         print('[ERROR] This action (%s) not found in OPERATIONS keys!' % action)
+    except IndexError:
+        print('[ERROR] Index 1 or 2 not found in OPERATIONS[\'%s\']'% action)
     # for line in text.split('\n'):
         # gs = re.findall(rx, line)
     func_name = file.name.split('/')[-1].split('.')[0] # из start label
@@ -63,14 +64,9 @@ def generate_descr_line(file: '_io.TextIOWrapper', action: str, label: str, coun
 
     desc_line = insert_desc(tpl, func_name, label, count)
     file.write(desc_line)
-    
+
     # print('%s : %s : %s : %s' % (func_name, action, tpl, label))
 
     return (action, tpl, func_name, label)
 
-
-if __name__ == '__main__':
-    for f in glob.glob('%s*.dot' % work_dir):
-        for l in open(f, 'r').readlines():
-            print(l)
 
