@@ -67,11 +67,16 @@ try:
 						shape = SHAPES[action]
 					except KeyError:
 						shape = 'box'
-					if 'input' in action:
-						in_str = l.split(':')[2].strip().replace('"','\\"')
+					if 'input' in action or 'output' in action:
+						in_str = ': %s' % l.split(':')[2].strip().replace('"','\\"')
+						# print(in_str)
 					else:
 						in_str = ''
-					label = '%s %s' % (translate(l.split(':')[1].strip().replace('"','\\"')), in_str)
+					# print(l.split(':')[1].strip().replace('"','\\"'))
+					# print(l.split(':')[1])
+					label = '%s%s' % (l.split(':')[1].strip().replace('"','\\"'), in_str)
+					print(label)
+					label = translate(label)
 					if 'for' in label:
 						shape = 'hexagon'
 					res_str = '%s [shape="%s" label="%s"]\n' % (node, shape, wrap(label, 20))

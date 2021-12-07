@@ -15,11 +15,11 @@ import re
 
 
 OPERATIONS = {
-    'start': ['начало', '## Описание функции "F".'],
-    'subroutine': ['подпрограмма', '"N". Выполняется подпрограмма "P", '],
-    'operation': ['действие', '"N". Выполняется действие "A", '],
-    'condition': ['условие', '"N". Проверяется условие "C", '],
-    'inputoutput': ['ввод-вывод', 'Функция "F" на вход принимает данные "I".\n Состоит из операций:', 'Функция "F" возвращяет данные "O".'],
+    'start': ['начало', '## Описание функции "F".\n'],
+    'subroutine': ['подпрограмма', '"N". Выполняется подпрограмма "P", \n'],
+    'operation': ['действие', '"N". Выполняется действие "A", \n'],
+    'condition': ['условие', '"N". Проверяется условие "C", \n'],
+    'inputoutput': ['ввод-вывод', 'Функция "F" на вход принимает данные "I".\n Состоит из операций:\n', 'Функция "F" возвращяет данные "O".'],
     'end': ['конец', 'end'],
 }
 
@@ -49,9 +49,9 @@ def insert_desc(template: str, f_name: str, data: str, count: int) -> str:
 def generate_descr_line(file: '_io.TextIOWrapper', action: str, label: str, count: int) -> tuple:
     tpl = None
     try:
+        # print(label)
         tpl = OPERATIONS[action][1]
         if 'вывод' in label:
-            print(label)
             tpl = OPERATIONS[action][2]
     except KeyError:
         print('[ERROR] This action (%s) not found in OPERATIONS keys!' % action)
