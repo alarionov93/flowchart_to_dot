@@ -1,8 +1,9 @@
 import re
 import sys
+
 from glob import glob
 from descr_gen import generate_descr_line
-
+from sys import stderr
 
 '''
 'start': 'ellipse',
@@ -43,7 +44,7 @@ def translate(node):
 
 SHAPES = {
 	'start': 'ellipse',
-	'subroutine': 'box',
+	'subroutine': 'record',
 	'operation': 'box',
 	'condition': 'diamond',
 	'inputoutput': 'parallelogram',
@@ -53,12 +54,12 @@ SHAPES = {
 try:
 	work_dir = sys.argv[1]
 	for data_file in glob('%s*.d' % work_dir):
-		# print(data_file)
+		# print(data_file, file=stderr)
 		descr_f = open('%s.txt' % (data_file), 'w')
 		res_f = open('%s.dot' % (data_file), 'w')
 		res_f.write('digraph G {\nsplines=ortho\nnodesep=1\n')
 		with open(data_file, 'r') as f:
-			count = 0
+			count = 1
 			for l in f.readlines():
 				if '=>' in l:
 					node = l.split('=>')[0]
@@ -69,16 +70,18 @@ try:
 						shape = 'box'
 					if 'input' in action or 'output' in action:
 						in_str = ': %s' % l.split(':')[2].strip().replace('"','\\"')
-						# print(in_str)
+						# print(in_str, file=stderr)
 					else:
 						in_str = ''
-					# print(l.split(':')[1].strip().replace('"','\\"'))
-					# print(l.split(':')[1])
+					# print(l.split(':')[1].strip().replace('"','\\"'), file=stderr)
+					# print(l.split(':')[1], file=stderr)
 					label = '%s%s' % (l.split(':')[1].strip().replace('"','\\"'), in_str)
-					print(label)
+					print(label, file=stderr)
 					label = translate(label)
 					if 'for' in label:
 						shape = 'hexagon'
+					if shape == 'record' :
+						label = ' |%s| ' % label
 					res_str = '%s [shape="%s" label="%s"]\n' % (node, shape, wrap(label, 20))
 					res_f.write(res_str)
 					generate_descr_line(descr_f, action, label, count)
@@ -95,5 +98,5 @@ try:
 		res_f.close()
 		descr_f.close()
 except IndexError:
-	print('Pass working directory parameter!')
+	print('Pass working directory parameter!', file=stderr)
 
